@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="pt-BR">
+<head><meta charset="utf-8"><title>Análises</title><link rel="stylesheet" href="/styles.css"><script src="/app.js"></script></head>
+<body>
+<div id="nav"></div>
+<main>
+  <h3>Análises detalhadas</h3>
+  <table class="table" id="tbl"><thead><tr><th>Data</th><th>Candidato</th><th>Tema</th><th>Sentimento</th><th>Categoria</th><th>Fonte</th><th>Título</th></tr></thead><tbody></tbody></table>
+</main>
+<script>
+  document.getElementById('nav').innerHTML = nav();
+  getJSON('/api/analises').then((data) => {
+    document.querySelector('#tbl tbody').innerHTML = data.items.map((r) =>
+      `<tr><td>${r.date}</td><td>${r.candidate}</td><td>${r.theme}</td><td>${r.sentiment}</td><td>${r.category}</td><td>${r.source}</td><td>${r.title}</td></tr>`
+    ).join('');
+  });
+</script>
+</body>
+</html>
