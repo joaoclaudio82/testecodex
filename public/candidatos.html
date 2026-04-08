@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="pt-BR">
+<head><meta charset="utf-8"><title>Candidatos</title><link rel="stylesheet" href="/styles.css"><script src="/app.js"></script></head>
+<body>
+<div id="nav"></div>
+<main>
+  <h3>Candidatos</h3>
+  <form id="form" class="filters">
+    <input name="full_name" placeholder="Nome completo" required>
+    <input name="display_name" placeholder="Nome de exibição" required>
+    <input name="party" placeholder="Partido">
+    <button type="submit">Adicionar</button>
+  </form>
+  <table class="table" id="tbl"><thead><tr><th>ID</th><th>Nome</th><th>Exibição</th><th>Partido</th><th>Ativo</th></tr></thead><tbody></tbody></table>
+</main>
+<script>
+  document.getElementById('nav').innerHTML = nav();
+  async function load() {
+    const data = await getJSON('/api/candidatos');
+    document.querySelector('#tbl tbody').innerHTML = data.items.map((c) =>
+      `<tr><td>${c.id}</td><td>${c.full_name}</td><td>${c.display_name}</td><td>${c.party || ''}</td><td>${c.is_active ? 'Sim' : 'Não'}</td></tr>`
+    ).join('');
+  }
+  document.getElementById('form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const fd = new FormData(e.target);
+    await fetch('/api/candidatos', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(Object.fromEntries(fd.entries())) });
+    e.target.reset();
+    load();
+  });
+  load();
+</script>
+</body>
+</html>

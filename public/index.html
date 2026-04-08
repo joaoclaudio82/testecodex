@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="pt-BR">
+<head><meta charset="utf-8"><title>Visão Geral</title><link rel="stylesheet" href="/styles.css"><script src="/app.js"></script></head>
+<body>
+  <div id="nav"></div>
+  <main>
+    <h3>Visão geral</h3>
+    <div id="cards" class="card-grid"></div>
+    <table class="table" id="tbl"><thead><tr><th>Candidato</th><th>Positivo</th><th>Neutro</th><th>Negativo</th><th>Total</th></tr></thead><tbody></tbody></table>
+  </main>
+<script>
+  document.getElementById('nav').innerHTML = nav();
+  getJSON('/api/overview').then((data) => {
+    document.getElementById('cards').innerHTML = `
+      <div class="card"><strong>Notícias</strong><br>${data.totals.noticias}</div>
+      <div class="card"><strong>Positivas</strong><br>${data.totals.positivas}</div>
+      <div class="card"><strong>Neutras</strong><br>${data.totals.neutras}</div>
+      <div class="card"><strong>Negativas</strong><br>${data.totals.negativas}</div>`;
+
+    document.querySelector('#tbl tbody').innerHTML = data.byCandidate.map((r) =>
+      `<tr><td>${r.candidate}</td><td>${r.positivo}</td><td>${r.neutro}</td><td>${r.negativo}</td><td>${r.total}</td></tr>`
+    ).join('');
+  });
+</script>
+</body>
+</html>

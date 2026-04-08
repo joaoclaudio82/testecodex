@@ -1,50 +1,57 @@
-# Monitor de Tendência Eleitoral (Presidência do Brasil)
+# Monitor de Tendência Eleitoral (MVP testável)
 
-Aplicação para monitorar tendências eleitorais de candidatos à Presidência do Brasil a partir de notícias já coletadas/salvas.
+MVP funcional para acompanhar tendências eleitorais de candidatos à Presidência do Brasil com base em notícias salvas.
 
-## Objetivo
+## O que já está implementado
 
-Consolidar notícias em um banco PostgreSQL, relacionar conteúdos com candidatos presidenciais e gerar indicadores de sentimento ao longo do tempo.
+- Rotas de páginas:
+  - `/` (visão geral)
+  - `/analises` (análises detalhadas)
+  - `/candidatos` (gestão básica)
+  - `/historico` (série temporal)
+- API local para alimentar os dashboards:
+  - `GET /api/overview`
+  - `GET /api/analises`
+  - `GET /api/historico`
+  - `GET/POST/PATCH /api/candidatos`
+- Dados de demonstração em memória para facilitar testes imediatos.
 
-## Escopo atual
+> Nota: o schema PostgreSQL está em `docs/modelo-dados.sql` e pode ser conectado na próxima etapa.
 
-Somente candidatos ao cargo de **Presidente**.
+## Como testar agora
 
-## Páginas
+### 1) Instalar dependências
 
-- `/` — Visão geral
-- `/analises` — Análises detalhadas
-- `/candidatos` — Gestão de candidatos presidenciais
-- `/historico` — Evolução temporal dos indicadores
+```bash
+npm install
+```
 
-## Principais funcionalidades
+### 2) Subir o servidor
 
-1. **Ingestão e persistência de notícias**
-   - Uso de notícias previamente salvas.
-   - Armazenamento em PostgreSQL.
-   - Relacionamento notícia ↔ candidato(s).
+```bash
+npm run dev
+```
 
-2. **Análise de sentimento**
-   - Classificação por notícia, candidato e tema: `positivo`, `neutro`, `negativo`.
+ou
 
-3. **Dashboards e filtros**
-   - Gráficos e métricas por:
-     - categoria
-     - candidato
-     - fonte
-     - período
+```bash
+npm start
+```
 
-4. **Histórico temporal**
-   - Série temporal para acompanhar evolução de:
-     - aprovação
-     - rejeição
-     - indiferença
+### 3) Acessar no navegador
 
-5. **Gestão de candidatos**
-   - Cadastro/edição/ativação de candidatos presidenciais.
+- http://localhost:3000/
+- http://localhost:3000/analises
+- http://localhost:3000/candidatos
+- http://localhost:3000/historico
 
-## Documentação complementar
+## Estrutura
 
-- Arquitetura e fluxo de dados: `docs/arquitetura.md`
-- Modelo de dados PostgreSQL (MVP): `docs/modelo-dados.sql`
-- Backlog inicial e critérios de aceite: `docs/backlog-mvp.md`
+- `src/server.js`: servidor Node.js (HTTP nativo) + rotas de página e API
+- `public/*`: frontend estático (dashboards e tabelas)
+- `data/mock-data.js`: base de notícias/candidatos para teste rápido
+- `docs/modelo-dados.sql`: modelo PostgreSQL do domínio
+
+## Próximo passo recomendado
+
+Conectar os endpoints à base PostgreSQL e trocar `data/mock-data.js` por consultas SQL usando o schema do projeto.
